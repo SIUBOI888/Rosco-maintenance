@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="mb-4">
+    Purchase Requests
+</h1>
+
+<a href="/purchasing/create/"
+   class="btn btn-success mb-3">
+
+    Create Purchase Request
+
+</a>
+
+<table class="table table-bordered table-striped">
+
+    <thead class="table-dark">
+
+        <tr>
+
+            <th>Ticket</th>
+            <th>Part</th>
+            <th>Qty</th>
+            <th>Supplier</th>
+            <th>Cost</th>
+            <th>ETA</th>
+            <th>Status</th>
+            <th>Actions</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for purchase in purchases %}
+
+        <tr>
+
+            <td>{{ purchase.ticket }}</td>
+
+            <td>{{ purchase.part_name }}</td>
+
+            <td>{{ purchase.quantity }}</td>
+
+            <td>{{ purchase.supplier }}</td>
+
+            <td>{{ purchase.estimated_cost }}</td>
+
+            <td>{{ purchase.eta }}</td>
+
+            <td>{{ purchase.status }}</td>
+
+            <td>
+
+                <a href="/purchasing/{{ purchase.id }}/status/Ordered/"
+                   class="btn btn-primary btn-sm">
+
+                    Ordered
+
+                </a>
+
+                <a href="/purchasing/{{ purchase.id }}/status/In Transit/"
+                   class="btn btn-info btn-sm">
+
+                    Transit
+
+                </a>
+
+                <a href="/purchasing/{{ purchase.id }}/status/Delivered/"
+                   class="btn btn-success btn-sm">
+
+                    Delivered
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

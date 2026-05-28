@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="mb-4">
+
+
+Ticket Details
+
+
+</h1>
+
+<div class="card mb-4">
+
+
+<div class="card-body">
+
+    <h3>
+
+        {{ ticket.machine }}
+
+    </h3>
+
+    <p>
+
+        <strong>Issue:</strong>
+        {{ ticket.issue }}
+
+    </p>
+
+    <p>
+
+        <strong>Purchasing Status:</strong>
+        {{ ticket.purchasing_status }}
+
+    </p>
+
+    <p>
+
+        <strong>Date Created:</strong>
+        {{ ticket.created_at }}
+
+    </p>
+
+    {% if ticket.photo %}
+
+        <img src="{{ ticket.photo.url }}"
+             width="400"
+             class="img-thumbnail">
+
+    {% endif %}
+
+</div>
+
+
+</div>
+
+<h3>
+    Purchase Requests
+</h3>
+
+<table class="table table-bordered">
+
+
+<tr>
+
+    <th>Part</th>
+    <th>Qty</th>
+    <th>Supplier</th>
+    <th>Cost</th>
+    <th>Status</th>
+
+</tr>
+
+{% for purchase in purchases %}
+
+<tr>
+
+    <td>{{ purchase.part_name }}</td>
+
+    <td>{{ purchase.quantity }}</td>
+
+    <td>{{ purchase.supplier }}</td>
+
+    <td>₱{{ purchase.estimated_cost }}</td>
+
+    <td>{{ purchase.status }}</td>
+
+</tr>
+
+{% endfor %}
+
+
+</table>
+
+{% if user.groups.all.0.name == 'Purchasing' %}
+
+
+<h3 class="mt-4">
+
+    Purchasing Actions
+
+</h3>
+
+<a href="/tickets/{{ ticket.id }}/status/Received/"
+   class="btn btn-warning me-2">
+
+   Receive
+
+</a>
+
+<a href="/tickets/{{ ticket.id }}/status/Ordered/"
+   class="btn btn-primary me-2">
+
+   Ordered
+
+</a>
+
+<a href="/tickets/{{ ticket.id }}/status/In Transit/"
+   class="btn btn-info me-2">
+
+   Transit
+
+</a>
+
+<a href="/tickets/{{ ticket.id }}/status/Delivered/"
+   class="btn btn-success me-2">
+
+   Delivered
+
+</a>
+
+<br><br>
+
+<a href="/purchasing/create/"
+   class="btn btn-dark">
+
+   Add Purchase Request
+
+</a>
+
+
+{% endif %}
+
+
+{% if user.groups.all.0.name == 'Mechanic' %}
+
+```
+{% if ticket.purchasing_status == 'Delivered' %}
+
+    <a href="/tickets/{{ ticket.id }}/accept/"
+       class="btn btn-dark">
+
+       Accept Delivery
+
+    </a>
+
+    <a href="/tickets/{{ ticket.id }}/close/"
+       class="btn btn-danger">
+
+       Close Ticket
+
+    </a>
+
+{% endif %}
+
+
+{% endif %}
+
+{% endblock %}

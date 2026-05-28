@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="mb-4">
+
+    {{ machine.machine_name }}
+
+</h1>
+
+{% if machine.machine_photo %}
+
+    <img src="{{ machine.machine_photo.url }}"
+         width="300"
+         class="img-thumbnail mb-4">
+
+{% endif %}
+
+<h3>Machine Information</h3>
+
+<ul class="list-group mb-4">
+
+    <li class="list-group-item">
+
+        Type:
+        {{ machine.machine_type }}
+
+    </li>
+
+    <li class="list-group-item">
+
+        Total Repair Cost:
+        ₱{{ total_cost }}
+
+    </li>
+
+    <li class="list-group-item">
+
+        Last Serviced:
+
+        {% if last_serviced %}
+
+            {{ last_serviced.closed_at }}
+
+        {% else %}
+
+            Never
+
+        {% endif %}
+
+    </li>
+
+</ul>
+
+<h3>Active Tickets</h3>
+
+<table class="table table-bordered mb-5">
+
+    <tr>
+        <th>Issue</th>
+        <th>Status</th>
+    </tr>
+
+    {% for ticket in active_tickets %}
+
+    <tr>
+
+        <td>{{ ticket.issue }}</td>
+
+        <td>{{ ticket.purchasing_status }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+{% for ticket in closed_tickets %}
+
+<div class="card mb-4">
+
+```
+<div class="card-body">
+
+    <h4>
+
+        {{ ticket.issue }}
+
+    </h4>
+
+    <p>
+
+        Closed:
+        {{ ticket.closed_at }}
+
+    </p>
+
+    <p>
+
+        Purchasing Status:
+        {{ ticket.purchasing_status }}
+
+    </p>
+
+    {% if ticket.photo %}
+
+        <img src="{{ ticket.photo.url }}"
+             width="300"
+             class="img-thumbnail mb-3">
+
+    {% endif %}
+
+    <h5>
+        Purchase Requests
+    </h5>
+
+    <table class="table table-bordered">
+
+        <tr>
+
+            <th>Part</th>
+            <th>Qty</th>
+            <th>Supplier</th>
+            <th>Cost</th>
+
+        </tr>
+
+        {% for purchase in ticket.purchaserequest_set.all %}
+
+        <tr>
+
+            <td>{{ purchase.part_name }}</td>
+
+            <td>{{ purchase.quantity }}</td>
+
+            <td>{{ purchase.supplier }}</td>
+
+            <td>₱{{ purchase.estimated_cost }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

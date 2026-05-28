@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="mb-4">
+    Maintenance Tickets
+</h1>
+
+<a href="/tickets/create/"
+class="btn btn-success mb-3">
+
+
+Create Ticket
+
+
+</a>
+
+<table class="table table-bordered table-striped">
+
+
+<thead class="table-dark">
+
+    <tr>
+
+        <th>Machine</th>
+        <th>Issue</th>
+        <th>Purchasing</th>
+        <th>Maintenance</th>
+        <th>Closed</th>
+        <th>Date Created</th>
+        <th>Photo</th>
+        <th>Actions</th>
+
+    </tr>
+
+</thead>
+
+<tbody>
+
+    {% for ticket in tickets %}
+
+    <tr>
+
+        <td>
+
+            <a href="/machines/{{ ticket.machine.id }}/">
+
+                {{ ticket.machine }}
+
+            </a>
+
+        </td>
+
+        <td>{{ ticket.issue }}</td>
+
+        <td>
+
+    {{ ticket.purchasing_status }}
+
+</td>
+
+<td>
+
+    {% if ticket.maintenance_accepted %}
+
+        Accepted
+
+    {% else %}
+
+        Waiting
+
+    {% endif %}
+
+</td>
+
+<td>
+
+    {% if ticket.maintenance_closed %}
+
+        Closed
+
+    {% else %}
+
+        Open
+
+    {% endif %}
+
+</td>
+
+        <td>{{ ticket.created_at }}</td>
+
+        <td>
+
+            {% if ticket.photo %}
+
+                <img src="{{ ticket.photo.url }}"
+                     width="120"
+                     class="img-thumbnail">
+
+            {% endif %}
+
+        </td>
+
+        <td>
+
+
+<a href="/tickets/{{ ticket.id }}/"
+   class="btn btn-primary btn-sm">
+
+   View
+
+</a>
+
+
+</td>
+
+
+    </tr>
+
+    {% endfor %}
+
+</tbody>
+
+
+</table>
+
+{% endblock %}

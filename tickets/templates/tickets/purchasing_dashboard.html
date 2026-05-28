@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="mb-4">
+
+
+Purchasing Dashboard
+
+
+</h1>
+
+<table class="table table-bordered">
+
+
+<thead class="table-dark">
+
+    <tr>
+
+        <th>Machine</th>
+        <th>Issue</th>
+        <th>Status</th>
+        <th>Actions</th>
+
+    </tr>
+
+</thead>
+
+<tbody>
+
+    {% for ticket in tickets %}
+
+    <tr>
+
+        <td>{{ ticket.machine }}</td>
+
+        <td>{{ ticket.issue }}</td>
+
+        <td>{{ ticket.purchasing_status }}</td>
+
+        <td>
+
+            <a href="/tickets/{{ ticket.id }}/"
+               class="btn btn-primary btn-sm">
+
+               Open Ticket
+
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</tbody>
+
+</table>
+
+{% endblock %}

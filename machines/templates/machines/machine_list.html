@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="mb-4">
+    Machines
+</h1>
+
+<a href="/machines/create/"
+   class="btn btn-success mb-3">
+
+    Add Machine
+
+</a>
+
+<div class="row">
+
+    {% for machine in machines %}
+
+    <div class="col-md-4 mb-4">
+
+        <div class="card">
+
+            {% if machine.machine_photo %}
+
+                <img src="{{ machine.machine_photo.url }}"
+                     class="card-img-top"
+                     style="height:250px;
+                            object-fit:cover;">
+
+            {% endif %}
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+
+                    {{ machine.machine_name }}
+
+                </h5>
+
+                <p>
+
+                    {{ machine.machine_type }}
+
+                </p>
+
+                <a href="/machines/{{ machine.id }}/"
+                   class="btn btn-primary">
+
+                    View Machine
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

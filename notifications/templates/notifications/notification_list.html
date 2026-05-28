@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="mb-4">
+
+
+Notifications
+
+
+</h1>
+
+{% for notification in notifications %}
+
+<div class="card mb-3">
+
+
+<div class="card-body">
+
+    <p>
+
+        {{ notification.message }}
+
+    </p>
+
+    <small>
+
+        {{ notification.created_at }}
+
+    </small>
+
+    {% if notification.ticket %}
+
+        <br><br>
+
+        <a href="/tickets/{{ notification.ticket.id }}/"
+           class="btn btn-primary btn-sm">
+
+           Open Ticket
+
+        </a>
+
+    {% endif %}
+
+</div>
+
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

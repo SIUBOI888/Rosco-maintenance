@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="/machines/create/" class="btn btn-secondary mb-3">
+    Add New Machine
+</a>
+<h1 class="mb-4">
+    Create Maintenance Ticket
+</h1>
+
+<form method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button class="btn btn-primary">
+        Submit Ticket
+    </button>
+
+</form>
+
+{% endblock %}
