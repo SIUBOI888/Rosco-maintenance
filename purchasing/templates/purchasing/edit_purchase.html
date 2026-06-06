@@ -2,18 +2,32 @@
 
 {% block content %}
 
-<h1 class="mb-4">
+<h1>
 
-    Add Purchase Request
+    Update Purchase Request
 
 </h1>
 
-<div class="alert alert-info">
+<p>
 
-    Ticket:
-    {{ ticket.machine }}
+    Part:
+    {{ purchase.part_name }}
 
-</div>
+</p>
+
+<p>
+
+    Quantity:
+    {{ purchase.quantity }}
+
+</p>
+
+<p>
+
+    Notes:
+    {{ purchase.notes }}
+
+</p>
 
 <form method="POST">
 
@@ -23,7 +37,7 @@
 
     <button class="btn btn-success">
 
-        Save Request
+        Save
 
     </button>
 

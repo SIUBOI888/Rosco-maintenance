@@ -9,4 +9,20 @@ class PurchaseRequestForm(forms.ModelForm):
 
         model = PurchaseRequest
 
-        fields = '__all__'
+        fields = [
+    'part_name',
+    'quantity',
+    'notes'
+]
+        
+class PurchasingUpdateForm(forms.ModelForm):
+
+    class Meta:
+
+        model = PurchaseRequest
+
+        fields = [
+            'supplier',
+            'estimated_cost',
+            'eta'
+        ]

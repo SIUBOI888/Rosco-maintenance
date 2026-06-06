@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>
+    Operator Dashboard
+</h2>
+
+<div class="card p-3">
+
+
+<h4>
+    Welcome {{ user.username }}
+</h4>
+
+<p>
+    Create machine maintenance tickets.
+</p>
+
+<a href="/tickets/create/"
+   class="btn btn-primary">
+
+   Create Ticket
+
+</a>
+
+</div>
+
+{% endblock %}

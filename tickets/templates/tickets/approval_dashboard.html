@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>
+
+    Approval Dashboard
+
+</h1>
+
+<table class="table table-bordered">
+
+    <tr>
+
+        <th>Machine</th>
+        <th>Issue</th>
+        <th>Created By</th>
+        <th>Actions</th>
+
+    </tr>
+
+    {% for ticket in tickets %}
+
+    <tr>
+
+        <td>{{ ticket.machine }}</td>
+
+        <td>{{ ticket.issue }}</td>
+
+        <td>{{ ticket.created_by }}</td>
+
+        <td>
+
+            <a href="/tickets/{{ ticket.id }}/"
+               class="btn btn-primary">
+
+                Review
+
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+{% endblock %}

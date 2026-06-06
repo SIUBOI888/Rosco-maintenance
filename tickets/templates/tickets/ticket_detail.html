@@ -3,11 +3,7 @@
 {% block content %}
 
 <h1 class="mb-4">
-
-
-Ticket Details
-
-
+    Ticket Details
 </h1>
 
 <div class="card mb-4">
@@ -15,31 +11,26 @@ Ticket Details
 
 <div class="card-body">
 
-    <h3>
-
-        {{ ticket.machine }}
-
-    </h3>
+    <h3>{{ ticket.machine }}</h3>
 
     <p>
-
         <strong>Issue:</strong>
         {{ ticket.issue }}
-
     </p>
 
     <p>
-
-        <strong>Purchasing Status:</strong>
-        {{ ticket.purchasing_status }}
-
+        <strong>Status:</strong>
+        {{ ticket.get_workflow_status_display }}
     </p>
 
     <p>
+        <strong>Created By:</strong>
+        {{ ticket.created_by }}
+    </p>
 
+    <p>
         <strong>Date Created:</strong>
         {{ ticket.created_at }}
-
     </p>
 
     {% if ticket.photo %}
@@ -62,108 +53,222 @@ Ticket Details
 <table class="table table-bordered">
 
 
-<tr>
+<thead>
 
-    <th>Part</th>
-    <th>Qty</th>
-    <th>Supplier</th>
-    <th>Cost</th>
-    <th>Status</th>
+    <tr>
 
-</tr>
+        <th>Part</th>
+        <th>Qty</th>
+        <th>Supplier</th>
+        <th>Cost</th>
+        <th>ETA</th>
+        <th>Notes</th>
+        <th>Status</th>
+        <th>Actions</th>
 
-{% for purchase in purchases %}
+    </tr>
 
-<tr>
+</thead>
 
-    <td>{{ purchase.part_name }}</td>
+<tbody>
 
-    <td>{{ purchase.quantity }}</td>
+    {% for purchase in purchases %}
 
-    <td>{{ purchase.supplier }}</td>
+    <tr>
 
-    <td>₱{{ purchase.estimated_cost }}</td>
+        <td>{{ purchase.part_name }}</td>
 
-    <td>{{ purchase.status }}</td>
+        <td>{{ purchase.quantity }}</td>
 
-</tr>
+        <td>{{ purchase.supplier }}</td>
 
-{% endfor %}
+        <td>₱{{ purchase.estimated_cost }}</td>
+
+        <td>{{ purchase.eta }}</td>
+
+        <td>{{ purchase.notes }}</td>
+
+        <td>
+
+            {{ purchase.status }}
+
+            {% if purchase.maintenance_accepted %}
+
+                <br>
+
+                <span class="text-success">
+
+                    Accepted By Maintenance
+
+                </span>
+
+            {% endif %}
+
+        </td>
+
+        <td>
+
+            {% if user.groups.all.0.name == 'Purchasing' %}
+
+                <a href="/purchasing/edit/{{ purchase.id }}/"
+                   class="btn btn-primary btn-sm">
+
+                    Edit
+
+                </a>
+
+                {% if purchase.status == 'Draft' or purchase.status == 'Pending' %}
+
+                <a href="/purchasing/submit-to-boss/{{ purchase.id }}/"
+                   class="btn btn-warning btn-sm">
+
+                    Submit To Boss
+
+                </a>
+
+                {% endif %}
+
+                {% if purchase.status == 'Approved' %}
+
+                <a href="/purchasing/ordered/{{ purchase.id }}/"
+                   class="btn btn-info btn-sm">
+
+                    Ordered
+
+                </a>
+
+                {% endif %}
+
+                {% if purchase.status == 'Ordered' %}
+
+                <a href="/purchasing/arrived/{{ purchase.id }}/"
+                   class="btn btn-secondary btn-sm">
+
+                    Arrived
+
+                </a>
+
+                {% endif %}
+
+                {% if purchase.status == 'Arrived' %}
+
+                <a href="/purchasing/delivered/{{ purchase.id }}/"
+                   class="btn btn-success btn-sm">
+
+                    Delivered
+
+                </a>
+
+                {% endif %}
+
+            {% endif %}
+
+
+            {% if user.groups.all.0.name == 'Boss' or user.is_superuser %}
+
+                {% if purchase.status == 'Pending Approval' %}
+
+                <a href="/purchasing/approve/{{ purchase.id }}/"
+                   class="btn btn-success btn-sm">
+
+                    Approve
+
+                </a>
+
+                <a href="/purchasing/reject/{{ purchase.id }}/"
+                   class="btn btn-danger btn-sm">
+
+                    Reject
+
+                </a>
+
+                {% endif %}
+
+            {% endif %}
+
+
+            {% if user.groups.all.0.name == 'Mechanic' %}
+
+                {% if purchase.status == 'Delivered' and not purchase.maintenance_accepted %}
+
+                <a href="/purchasing/accept/{{ purchase.id }}/"
+                   class="btn btn-dark btn-sm">
+
+                    Accept Delivery
+
+                </a>
+
+                {% endif %}
+
+            {% endif %}
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+
+        <td colspan="8">
+
+            No purchase requests yet
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</tbody>
 
 
 </table>
 
-{% if user.groups.all.0.name == 'Purchasing' %}
-
+{% if user.groups.all.0.name == 'Mechanic' %}
 
 <h3 class="mt-4">
-
-    Purchasing Actions
-
+    Material Request
 </h3>
 
-<a href="/tickets/{{ ticket.id }}/status/Received/"
-   class="btn btn-warning me-2">
+<a href="/purchasing/create/{{ ticket.id }}/"
+class="btn btn-dark">
 
-   Receive
 
-</a>
+Add Purchase Request
 
-<a href="/tickets/{{ ticket.id }}/status/Ordered/"
-   class="btn btn-primary me-2">
-
-   Ordered
-
-</a>
-
-<a href="/tickets/{{ ticket.id }}/status/In Transit/"
-   class="btn btn-info me-2">
-
-   Transit
-
-</a>
-
-<a href="/tickets/{{ ticket.id }}/status/Delivered/"
-   class="btn btn-success me-2">
-
-   Delivered
 
 </a>
 
 <br><br>
 
-<a href="/purchasing/create/"
-   class="btn btn-dark">
+{% if ticket.workflow_status == 'MAINTENANCE' %}
 
-   Add Purchase Request
+<a href="/tickets/{{ ticket.id }}/request-materials/"
+class="btn btn-warning">
+
+
+Send To Purchasing
+
 
 </a>
 
-
 {% endif %}
 
+{% endif %}
 
 {% if user.groups.all.0.name == 'Mechanic' %}
 
-```
-{% if ticket.purchasing_status == 'Delivered' %}
+<br><br>
 
-    <a href="/tickets/{{ ticket.id }}/accept/"
-       class="btn btn-dark">
+<a href="/tickets/{{ ticket.id }}/close/"
+class="btn btn-danger">
 
-       Accept Delivery
 
-    </a>
+Close Ticket
 
-    <a href="/tickets/{{ ticket.id }}/close/"
-       class="btn btn-danger">
 
-       Close Ticket
-
-    </a>
-
-{% endif %}
-
+</a>
 
 {% endif %}
 

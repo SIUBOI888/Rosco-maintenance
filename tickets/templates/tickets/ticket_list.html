@@ -24,9 +24,8 @@ Create Ticket
 
         <th>Machine</th>
         <th>Issue</th>
-        <th>Purchasing</th>
-        <th>Maintenance</th>
-        <th>Closed</th>
+        <th>Status</th>
+        <th>Created By</th>
         <th>Date Created</th>
         <th>Photo</th>
         <th>Actions</th>
@@ -53,40 +52,19 @@ Create Ticket
 
         <td>{{ ticket.issue }}</td>
 
-        <td>
+        
 
-    {{ ticket.purchasing_status }}
+   <td>
 
-</td>
-
-<td>
-
-    {% if ticket.maintenance_accepted %}
-
-        Accepted
-
-    {% else %}
-
-        Waiting
-
-    {% endif %}
+    {{ ticket.get_workflow_status_display }}
 
 </td>
 
 <td>
 
-    {% if ticket.maintenance_closed %}
-
-        Closed
-
-    {% else %}
-
-        Open
-
-    {% endif %}
+    {{ ticket.created_by }}
 
 </td>
-
         <td>{{ ticket.created_at }}</td>
 
         <td>

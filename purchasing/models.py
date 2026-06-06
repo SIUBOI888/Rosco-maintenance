@@ -2,21 +2,28 @@ from django.db import models
 
 from tickets.models import Ticket
 
-
 PURCHASE_STATUS = [
 
-    ('Pending', 'Pending'),
 
-    ('Ordered', 'Ordered'),
+('Draft', 'Draft'),
 
-    ('In Transit', 'In Transit'),
+('Pending Approval', 'Pending Approval'),
 
-    ('Delivered', 'Delivered'),
+('Approved', 'Approved'),
+
+('Rejected', 'Rejected'),
+
+('Ordered', 'Ordered'),
+
+('Arrived', 'Arrived'),
+
+('Delivered', 'Delivered'),
+
 
 ]
 
-
 class PurchaseRequest(models.Model):
+
 
     ticket = models.ForeignKey(
         Ticket,
@@ -31,12 +38,14 @@ class PurchaseRequest(models.Model):
 
     supplier = models.CharField(
         max_length=100,
-        blank=True
+        blank=True,
+        null=True
     )
 
     estimated_cost = models.DecimalField(
         max_digits=10,
-        decimal_places=2
+        decimal_places=2,
+        default=0
     )
 
     eta = models.DateField(
@@ -51,13 +60,33 @@ class PurchaseRequest(models.Model):
     status = models.CharField(
         max_length=50,
         choices=PURCHASE_STATUS,
-        default='Pending'
+        default='Draft'
+    )
+
+    submitted_at = models.DateTimeField(
+        blank=True,
+        null=True
+    )
+
+    approved_at = models.DateTimeField(
+        blank=True,
+        null=True
+    )
+
+    rejected_at = models.DateTimeField(
+        blank=True,
+        null=True
     )
 
     created_at = models.DateTimeField(
         auto_now_add=True
     )
 
+    maintenance_accepted = models.BooleanField(
+    default=False
+    )
+
     def __str__(self):
 
         return self.part_name
+

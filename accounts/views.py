@@ -4,6 +4,7 @@ from django.contrib.auth import logout
 
 def login_view(request):
 
+
     if request.method == 'POST':
 
         username = request.POST.get('username')
@@ -20,6 +21,14 @@ def login_view(request):
             login(request, user)
 
             if user.groups.filter(
+                name='Operator'
+            ).exists():
+
+                return redirect(
+                    '/tickets/operator-dashboard/'
+                )
+
+            elif user.groups.filter(
                 name='Mechanic'
             ).exists():
 
@@ -47,10 +56,12 @@ def login_view(request):
         request,
         'accounts/login.html'
     )
+
+
 def logout_view(request):
 
 
-    logout(request)
+        logout(request)
 
-    return redirect('/login/')
+        return redirect('/login/')
 

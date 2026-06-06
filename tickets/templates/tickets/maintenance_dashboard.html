@@ -14,9 +14,9 @@
 
             <th>Machine</th>
             <th>Issue</th>
-            <th>Purchasing</th>
-            <th>Accepted</th>
-            <th>Closed</th>
+            <th>Status</th>
+            <th>Created By</th>
+            <th>Date Created</th>
             <th>Actions</th>
 
         </tr>
@@ -33,52 +33,46 @@
 
             <td>{{ ticket.issue }}</td>
 
-            <td>{{ ticket.purchasing_status }}</td>
+            <td>
+
+    {{ ticket.get_workflow_status_display }}
+
+</td>
+
+<td>
+
+    {{ ticket.created_by }}
+
+</td>
+
+<td>
+
+    {{ ticket.created_at }}
+
+</td>
 
             <td>
 
-                {% if ticket.maintenance_accepted %}
+                <a href="/tickets/{{ ticket.id }}/"
+   class="btn btn-primary btn-sm">
 
-                    Accepted
+    View
 
-                {% else %}
+</a>
 
-                    Waiting
+<a href="/tickets/{{ ticket.id }}/request-materials/"
+   class="btn btn-warning btn-sm">
 
-                {% endif %}
+    Request Materials
 
-            </td>
+</a>
 
-            <td>
+<a href="/tickets/{{ ticket.id }}/close/"
+   class="btn btn-danger btn-sm">
 
-                {% if ticket.maintenance_closed %}
+    Close
 
-                    Closed
-
-                {% else %}
-
-                    Open
-
-                {% endif %}
-
-            </td>
-
-            <td>
-
-                <a href="/tickets/{{ ticket.id }}/accept/"
-                   class="btn btn-dark btn-sm">
-
-                    Accept
-
-                </a>
-
-                <a href="/tickets/{{ ticket.id }}/close/"
-                   class="btn btn-danger btn-sm">
-
-                    Close
-
-                </a>
-
+</a>
             </td>
 
         </tr>
